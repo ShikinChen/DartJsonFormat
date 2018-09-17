@@ -107,6 +107,7 @@ public class JsonDialog extends JDialog {
                 }
             });
         } catch (Exception exception) {
+            editorPane.setEditable(true);
             showAlertDialog("Json text format error");
         }
     }

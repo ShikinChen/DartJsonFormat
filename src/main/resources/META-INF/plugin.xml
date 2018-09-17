@@ -1,11 +1,10 @@
 <idea-plugin>
     <id>me.shiki.DartJsonFormat</id>
-    <name>Plugin display name here</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
-
+    <name>DartJsonFormat</name>
+    <vendor email="pitatensai@gmail.com" url="https://github.com/ShikinChen/DartJsonFormat">github</vendor>
+    <version>0.0.1</version>
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+        根据json文本转换成对应的dart的model类
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -13,17 +12,28 @@
     <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
     -->
+    <idea-version since-build="173.0" until-build="183.*"/>
+
+    <change-notes>
+        <![CDATA[
+            <h2>0.0.1</h2>
+                <ul>
+                    <li>根据json文本转换成对应的dart的model类，生成的代码根据<a href='https://pub.dartlang.org/packages/json_serializable'>json_serializable的模板</a></li>
+                 </ul>
+         ]]>
+    </change-notes>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
     </extensions>
+
+    <depends>Dart</depends>
 
     <actions>
         <!-- Add your actions here -->
 
-        <action id="DartJsonFormat.DartJsonFormatAction" class="me.shiki.dartjsonformat.MainAction"
+        <action id="DartJsonFormat" class="me.shiki.dartjsonformat.MainAction"
                 text="DartJsonFormat">
-            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <add-to-group group-id="GenerateGroup" anchor="after" relative-to-action="Generate.EqualsAndHashcode.Dart"/>
         </action>
     </actions>
 </idea-plugin>

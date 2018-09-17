@@ -30,8 +30,10 @@ public class MainAction extends BaseCodeInsightAction {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         Editor editor = event.getData(PlatformDataKeys.EDITOR);
         PsiFile mFile = PsiUtilBase.getPsiFileInEditor(editor, project);
-        JsonDialog jsonDialog = new JsonDialog(project, mFile);
-        jsonDialog.setVisible(true);
+        if (mFile.getName().endsWith(Constants.DART_TYPE_NAME)) {
+            JsonDialog jsonDialog = new JsonDialog(project, mFile);
+            jsonDialog.setVisible(true);
+        }
     }
 
     @NotNull

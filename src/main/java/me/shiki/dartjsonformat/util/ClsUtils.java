@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
+import me.shiki.dartjsonformat.Constants;
 import me.shiki.dartjsonformat.model.ClsEntity;
 import me.shiki.dartjsonformat.model.ClsType;
 import me.shiki.dartjsonformat.model.MustacheEntity;
@@ -30,7 +31,7 @@ public class ClsUtils {
     public MustacheEntity jsonElementToClsEntityList(String fileName, JsonElement jsonElement) {
         String clzName = null;
         if (!TextUtils.isEmpty(fileName)) {
-            fileName = fileName.replace(".dart", "");
+            fileName = fileName.replace(Constants.DART_TYPE_NAME, "");
             clzName = TextUtils.formatClassName(fileName);
         }
         Set<ClsEntity> clsEntityList = new LinkedHashSet<>();

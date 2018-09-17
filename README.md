@@ -1,5 +1,15 @@
 DartJsonFormat
 ------
+##安装方法
+[下载地址]()
+~~~
+     1.下载 DartJsonFormat.jar ,
+     2.Android studio  File->Settings..->Plugins -->
+ install plugin from disk..导入下载的 DartJsonFormat.jar ,
+     3重启 android studio .
+~~~
+
+##使用
 
 ## License
 
