@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.3.9'
+}
+
+group 'me.shiki'
+version '0.0.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'com.github.spullara.mustache.java', name: 'compiler', version: '0.9.5'
+}
+
+intellij {
+    version '2018.1.1'
+}
+prepareSandbox {
+    copy {
+        from './plugins'
+        into './build/idea-sandbox/plugins/'
+    }
+}
+patchPluginXml {
+    changeNotes """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}

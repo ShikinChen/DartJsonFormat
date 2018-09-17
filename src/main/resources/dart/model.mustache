@@ -1,0 +1,23 @@
+import 'dart:convert';
+{{#isJsonAnnotation}}import 'package:json_annotation/json_annotation.dart';{{/isJsonAnnotation}}
+
+part '{{fileName}}.g.dart';
+
+{{#clsEntities}}
+{{#isJsonAnnotation}}@JsonSerializable(){{/isJsonAnnotation}}
+class {{className}}{
+{{#properties}}
+    {{{clsTypeName}}} {{propName}};
+{{/properties}}
+
+    {{className}}();
+
+    factory {{className}}.fromJsonText(String json) =>_${{propName}}FromJson(JsonDecoder().convert(json));
+
+    factory {{className}}.fromJson(Map<String, dynamic> json) => _${{propName}}FromJson(json);
+
+    Map<String, dynamic> toJson() => _${{propName}}ToJson(this);
+}
+
+
+{{/clsEntities}}
