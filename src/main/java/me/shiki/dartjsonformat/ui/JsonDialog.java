@@ -1,16 +1,24 @@
 package me.shiki.dartjsonformat.ui;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import me.shiki.dartjsonformat.Constants;
+import me.shiki.dartjsonformat.action.DataWriter;
 import me.shiki.dartjsonformat.model.MustacheEntity;
 import me.shiki.dartjsonformat.util.ClsUtils;
-import me.shiki.dartjsonformat.util.MustacheUtils;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.*;
 
+/**
+ * @author shiki
+ */
 public class JsonDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -44,6 +52,28 @@ public class JsonDialog extends JDialog {
         setTitle(Constants.PLUGIN_NAME);
         setSize(600, 400);
         setLocationRelativeTo(null);
+        editorPane.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                hideTip();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                hideTip();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                hideTip();
+            }
+        });
+    }
+
+    private void hideTip() {
+        if (this.tip.isVisible()) {
+            this.tip.setVisible(false);
+        }
     }
 
     private void initListener() {
@@ -60,7 +90,7 @@ public class JsonDialog extends JDialog {
                             editorPane.setText(clsUtils.toJsonText(jsonArray));
                         }
                     } catch (Exception exception) {
-                        showAlertDialog("Json text format error");
+                        showTip("Json text format error");
                     }
                 }
         );
@@ -93,23 +123,17 @@ public class JsonDialog extends JDialog {
     }
 
     private void onOK() {
-        try {
-            editorPane.setEditable(false);
-            tip.setVisible(true);
-            String jsonText = editorPane.getText().trim();
-            MustacheEntity mustacheEntity = clsUtils.jsonElementToClsEntityList(file.getName(), jsonText);
-            mustacheEntity.setDir(clsUtils.getClsDir(file));
-            MustacheUtils.genDartFile(mustacheEntity, isSuccess -> {
-                editorPane.setEditable(true);
-                tip.setVisible(false);
-                if (isSuccess) {
-                    dispose();
-                }
-            });
-        } catch (Exception exception) {
-            editorPane.setEditable(true);
-            showAlertDialog("Json text format error");
-        }
+        WriteCommandAction.runWriteCommandAction(project, () -> {
+            try {
+                String jsonText = editorPane.getText().trim();
+                MustacheEntity mustacheEntity = clsUtils.jsonElementToMustacheEntity(file.getName(), jsonText);
+                DataWriter dataWriter = new DataWriter(project, clsUtils, mustacheEntity, file);
+                dataWriter.start();
+                dispose();
+            } catch (Exception exception) {
+                showTip("Json text format error");
+            }
+        });
     }
 
     private void onCancel() {
@@ -118,12 +142,11 @@ public class JsonDialog extends JDialog {
     }
 
 
-    private void showAlertDialog(String tip) {
-        if (alertDialog == null) {
-            alertDialog = new AlertDialog();
+    private void showTip(String tip) {
+        if (!this.tip.isVisible()) {
+            this.tip.setVisible(true);
         }
-        alertDialog.setTip(tip);
-        alertDialog.setVisible(true);
+        this.tip.setText(tip);
     }
 
 }

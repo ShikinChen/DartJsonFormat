@@ -18,7 +18,9 @@ dependencies {
 }
 
 intellij {
-    version '2018.1.1'
+    version '2017.2'
+    pluginName 'DartJsonFormat'
+    updateSinceUntilBuild false
 }
 prepareSandbox {
     copy {
@@ -26,8 +28,8 @@ prepareSandbox {
         into './build/idea-sandbox/plugins/'
     }
 }
-patchPluginXml {
-    changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
-}
+//patchPluginXml {
+//    changeNotes """
+//      Add change notes here.<br>
+//      <em>most HTML tags may be used</em>"""
+//}

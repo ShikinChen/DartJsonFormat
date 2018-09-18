@@ -4,7 +4,10 @@
     <vendor email="pitatensai@gmail.com" url="https://github.com/ShikinChen/DartJsonFormat">github</vendor>
     <version>0.0.1</version>
     <description><![CDATA[
-        根据json文本转换成对应的dart的model类
+        参考<a href='https://github.com/zzz40500/GsonFormat'>GsonFormat</a>
+        制作的Android Studio和idea插件，也是根据json文本转换成对应的dart的model类
+        使用方法跟GsonFormat差不多，而生成代码是根据
+        <a href='https://pub.dartlang.org/packages/json_serializable'> json_serializable</a>的生成模板
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -12,16 +15,14 @@
     <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
     -->
-    <idea-version since-build="173.0" until-build="183.*"/>
+    <idea-version since-build="172.3317"/>
 
-    <change-notes>
-        <![CDATA[
-            <h2>0.0.1</h2>
-                <ul>
-                    <li>根据json文本转换成对应的dart的model类，生成的代码根据<a href='https://pub.dartlang.org/packages/json_serializable'>json_serializable的模板</a></li>
-                 </ul>
-         ]]>
-    </change-notes>
+    <change-notes><![CDATA[
+        <h2>0.0.1</h2>
+        <ul>
+            <li>根据json文本转换成对应的dart的model类，生成的代码根据<a href='https://pub.dartlang.org/packages/json_serializable'>json_serializable的模板</a></li>
+        </ul>
+]]></change-notes>
 
     <extensions defaultExtensionNs="com.intellij">
     </extensions>

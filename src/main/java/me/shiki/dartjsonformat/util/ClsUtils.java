@@ -3,13 +3,13 @@ package me.shiki.dartjsonformat.util;
 import com.google.gson.*;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.PsiJavaFileImpl;
 import me.shiki.dartjsonformat.Constants;
 import me.shiki.dartjsonformat.model.ClsEntity;
 import me.shiki.dartjsonformat.model.ClsType;
 import me.shiki.dartjsonformat.model.MustacheEntity;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,23 +24,26 @@ public class ClsUtils {
         jsonParser = new JsonParser();
     }
 
-    public MustacheEntity jsonElementToClsEntityList(String fileName, String jsonText) {
-        return jsonElementToClsEntityList(fileName, tojsonElement(jsonText));
+    public MustacheEntity jsonElementToMustacheEntity(String fileName, String jsonText) {
+        return jsonElementToMustacheEntity(fileName, tojsonElement(jsonText));
     }
 
-    public MustacheEntity jsonElementToClsEntityList(String fileName, JsonElement jsonElement) {
-        String clzName = null;
-        if (!TextUtils.isEmpty(fileName)) {
-            fileName = fileName.replace(Constants.DART_TYPE_NAME, "");
-            clzName = TextUtils.formatClassName(fileName);
+    public MustacheEntity jsonElementToMustacheEntity(String fileName, JsonElement jsonElement) {
+        if (jsonElement != null && !TextUtils.isEmpty(fileName)) {
+            String clzName = null;
+            if (!TextUtils.isEmpty(fileName)) {
+                fileName = fileName.replace(Constants.DART_TYPE_NAME, "");
+                clzName = TextUtils.formatClassName(fileName);
+            }
+            Set<ClsEntity> clsEntityList = new LinkedHashSet<>();
+            if (jsonElement.isJsonObject()) {
+                jsonElementToClsEntity(null, clzName, ClsType.DYNAMIC_TYPE, jsonElement.getAsJsonObject(), clsEntityList);
+            } else if (jsonElement.isJsonArray()) {
+                jsonElementToClsEntity(null, clzName, ClsType.LIST_TYPE, jsonElement.getAsJsonArray(), clsEntityList);
+            }
+            return new MustacheEntity(fileName, clsEntityList);
         }
-        Set<ClsEntity> clsEntityList = new LinkedHashSet<>();
-        if (jsonElement.isJsonObject()) {
-            jsonElementToClsEntity(null, clzName, ClsType.DYNAMIC_TYPE, jsonElement.getAsJsonObject(), clsEntityList);
-        } else if (jsonElement.isJsonArray()) {
-            jsonElementToClsEntity(null, clzName, ClsType.LIST_TYPE, jsonElement.getAsJsonArray(), clsEntityList);
-        }
-        return new MustacheEntity(fileName, clsEntityList);
+        return null;
     }
 
     public void jsonElementToClsEntity(ClsEntity parent, String name, String clsType, JsonElement value, Set<ClsEntity> clsEntityList) {
@@ -54,9 +57,9 @@ public class ClsUtils {
         clsEntity.setClsTypeName(clsTypeName(clsEntity));
         if (value.isJsonObject()) {
             clsEntityList.add(clsEntity);
-            for (String key : value.getAsJsonObject().keySet()) {
-                JsonElement element = value.getAsJsonObject().get(key);
-                jsonElementToClsEntity(clsEntity, key, toClsType(key, element), element, clsEntityList);
+            for (Map.Entry entry : value.getAsJsonObject().entrySet()) {
+                JsonElement element = value.getAsJsonObject().get(entry.getKey().toString());
+                jsonElementToClsEntity(clsEntity, entry.getKey().toString(), toClsType(entry.getKey().toString(), element), element, clsEntityList);
             }
         } else if (value.isJsonArray()) {
             int size = value.getAsJsonArray().size();
@@ -118,6 +121,9 @@ public class ClsUtils {
     }
 
     public JsonElement tojsonElement(String jsonText) throws JsonIOException {
+        if (TextUtils.isEmpty(jsonText)) {
+            return null;
+        }
         return jsonParser.parse(jsonText);
     }
 
