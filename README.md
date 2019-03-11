@@ -5,15 +5,7 @@ DartJsonFormat
 使用方法跟GsonFormat差不多，而生成代码是根据
 [json_serializable](https://pub.dartlang.org/packages/json_serializable)的生成模板
 ##安装方法
-###方法1
-[下载地址](https://plugins.jetbrains.com/plugin/11150-dartjsonformat)
-1. Android studio  
- File->Settings..->Plugins-->Browse repositores..搜索DartJsonFormat
-2. 安装插件,重启android studio
-
-###方法2
-[下载地址1](https://github.com/ShikinChen/DartJsonFormat/releases)
-[下载地址2](https://plugins.jetbrains.com/plugin/11150-dartjsonformat)
+[下载地址](https://github.com/ShikinChen/DartJsonFormat/releases)
 1. 下载 DartJsonFormat-x.x.x.zip ,
 2. Android studio  File->Settings..->Plugins -->
 install plugin from disk..导入下载的 DartJsonFormat-x.x.x.zip ,
